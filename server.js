@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
-const pg = require('pg');
+const Client = require('pg');
 
 //controllers for routes
 const register = require('./controllers/register');
@@ -18,15 +18,13 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //postgres database configuration into with knex
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: 'pass',
-        database: 'facial-recog'
-    }
+//this is a local server Heroku won't be able to recognize it
+const db = new knex({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
 });
+
+db.connect();
 
 //ENTRYPOINT 
 app.get('/', (req, res) => {
@@ -62,6 +60,7 @@ app.post('/imageUrl', (req, res) => {
     image.handleApiCall(req, res);
 });
 
+//SERVINT ON ENVIRONMENT PORT VARIABLE
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
