@@ -13,10 +13,6 @@ const image = require('./controllers/image');
 
 const PORT = process.env.PORT || 3000;
 
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
-
 //postgres database configuration into with knex
 //this is a local server Heroku won't be able to recognize it
 const db = new knex({
@@ -24,7 +20,9 @@ const db = new knex({
     ssl: true
 });
 
-db.connect();
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
 
 //ENTRYPOINT 
 app.get('/', (req, res) => {
