@@ -16,8 +16,11 @@ const PORT = process.env.PORT || 3000;
 //postgres database configuration into with knex
 //this is a local server Heroku won't be able to recognize it
 const db = new knex({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
+    client: 'pg',
+    connection: {
+        connectionString: process.env.DATABASE_URL,
+        ssl: true
+    }   
 });
 
 const app = express();
